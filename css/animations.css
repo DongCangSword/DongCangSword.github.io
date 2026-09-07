@@ -1,0 +1,57 @@
+/* ============================================================
+   animations.css —— 主题刷屏、故障、错峰入场、滚动进度条、降级
+   ============================================================ */
+
+/* 主题切换刷屏（1.2s，不变） */
+#theme-transition {
+  position: fixed; inset: 0; z-index: 9998;
+  pointer-events: none;
+  background: var(--bg-primary);
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+}
+#theme-transition.active { animation: themeSwipe 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+@keyframes themeSwipe {
+  0%   { clip-path: inset(0 0 100% 0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { clip-path: inset(0 0 0 0); opacity: 0; }
+}
+
+/* 首页标题故障 */
+#page-index .home-title.glitch { animation: glitch 0.2s forwards; }
+@keyframes glitch {
+  0%   { transform: translate(0,0); text-shadow: 0 0 0 transparent; }
+  20%  { transform: translate(-4px,2px); text-shadow: 4px 0 var(--accent), -4px 0 #ff3b30; }
+  40%  { transform: translate(4px,-2px); text-shadow: -4px 0 var(--accent), 4px 0 #ff3b30; }
+  60%  { transform: translate(-2px,3px); text-shadow: 3px 0 var(--accent), -3px 0 #ff3b30; }
+  80%  { transform: translate(2px,-1px); text-shadow: -2px 0 var(--accent), 2px 0 #ff3b30; }
+  100% { transform: translate(0,0); text-shadow: 0 0 0 transparent; }
+}
+
+/* 错峰入场 */
+.reveal { opacity: 0; transform: translateY(26px); }
+.reveal-in { animation: riseIn 0.7s var(--ease-out-soft) forwards; animation-delay: var(--d, 0ms); }
+@keyframes riseIn { to { opacity: 1; transform: translateY(0); } }
+.reveal-fade { opacity: 0; }
+.reveal-fade-in { animation: fadeOnly 0.8s ease forwards; animation-delay: var(--d, 0ms); }
+@keyframes fadeOnly { to { opacity: 1; } }
+
+/* 顶部滚动进度条 */
+#scroll-progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--accent), #5ac8fa);
+  box-shadow: 0 0 10px var(--accent-glow);
+  border-radius: 0 2px 2px 0;
+  z-index: 1002;
+  pointer-events: none;
+  transition: width 0.15s linear;
+}
+
+/* 减动效降级：推入动画瞬时完成 */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  #page-index #bg-canvas { display: none; }
+  .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; animation: none !important; }
+}

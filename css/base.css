@@ -1,0 +1,68 @@
+/* ============================================================
+   base.css —— 字体、全局变量、reset、主题变量
+   ============================================================ */
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Ultralight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Thin.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Light.woff2') format('woff2'); font-weight: 350; font-display: swap; }
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'PingFangSC'; src: url('/fonts/PingFangSC-Semibold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+
+:root {
+  --bg-primary: #f5f5f7;
+  --bg-secondary: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.6);
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #8e8e93;
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --accent: #007aff;
+  --accent-glow: rgba(0, 122, 255, 0.25);
+  --nav-bg: rgba(245, 245, 247, 0.6);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --particle-color: rgba(0, 0, 0, 0.15);
+  --font-family: 'PingFangSC', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+
+  --nav-h: 64px;
+  --footer-h: 72px;
+
+  /* ★ 新增：PPT「推入」页面切换 —— 时长 1s */
+  --push-dur: 1s;
+  --push-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.35);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --nav-bg: rgba(10, 10, 10, 0.55);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --particle-color: rgba(255, 255, 255, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background 0.6s ease, color 0.6s ease;
+  overflow: hidden;
+  height: 100vh;
+}
+
+a, button, [tabindex] { outline: none; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

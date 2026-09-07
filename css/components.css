@@ -1,0 +1,135 @@
+/* ============================================================
+   components.css —— 作品卡片、技术栈、关于我、通用文本
+   ============================================================ */
+.section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-size: clamp(32px, 5vw, 56px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px; }
+.section-desc { font-size: 18px; color: var(--text-secondary); max-width: 600px; line-height: 1.7; }
+
+/* ---------------- 作品集 ---------------- */
+.work-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 24px; width: 100%; }
+.work-section-title { font-size: 20px; font-weight: 600; margin: 32px 0 12px 0; color: var(--text-primary); display: flex; align-items: center; gap: 12px; width: 100%; }
+.work-section-title .tag { font-size: 12px; font-weight: 400; color: var(--text-muted); background: var(--border-glass); padding: 2px 12px; border-radius: 20px; }
+
+.work-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--border-glass);
+  padding: 24px 24px 20px;
+  transition: transform 0.4s var(--ease-out-soft), background 0.4s, border-color 0.4s, box-shadow 0.4s;
+  display: flex; flex-direction: column;
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+  transform-origin: center;
+}
+.work-card:hover { transform: translateY(-6px); background: var(--bg-glass); border-color: var(--accent); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+[data-theme="dark"] .work-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+.work-card.tilting { transition: transform 0.08s ease-out; }
+
+.work-card .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.work-card .card-num { font-size: 12px; font-weight: 500; color: var(--text-muted); font-variant: tabular-nums; }
+.work-card .card-badge { font-size: 10px; font-weight: 500; color: var(--accent); background: rgba(0,122,255,0.15); padding: 2px 12px; border-radius: 20px; }
+.work-card .card-name { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.work-card .card-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; flex: 1; }
+.work-card .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.work-card .card-tags span { font-size: 11px; color: var(--text-muted); background: var(--border-glass); padding: 2px 12px; border-radius: 16px; }
+.work-card .card-mock { width: 100%; aspect-ratio: 16/9; background: var(--border-glass); border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--text-muted); border: 1px dashed var(--border-glass); }
+.work-card .card-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.work-card .card-actions button,
+.work-card .card-actions a {
+  padding: 8px 20px; border-radius: 24px;
+  font-size: 13px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s, color 0.3s, box-shadow 0.3s;
+  font-family: var(--font-family);
+  background: var(--border-glass);
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.work-card .card-actions button:hover,
+.work-card .card-actions a:hover { transform: translateX(4px); background: var(--bg-card); color: var(--text-primary); }
+.work-card .card-actions .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.work-card .card-actions .primary:hover { background: #0066d9; color: #fff; transform: translateX(4px) scale(1.02); box-shadow: 0 4px 16px var(--accent-glow); }
+
+/* ---------------- 技术栈 ---------------- */
+.tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 32px; width: 100%; }
+.tech-col h3 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
+.tech-item { margin-bottom: 16px; }
+.tech-item .tech-label { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+.tech-item .tech-label .pct { color: var(--text-muted); font-variant: tabular-nums; }
+.tech-item .tech-bar { height: 4px; background: var(--border-glass); border-radius: 4px; overflow: hidden; }
+.tech-item .tech-bar .fill { height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--accent), #5ac8fa); transition: width 1.2s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+/* ---------------- 关于我 ---------------- */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 24px; width: 100%; }
+.about-text { font-size: 16px; color: var(--text-secondary); line-height: 1.8; }
+.about-text p { margin-bottom: 16px; }
+.about-contacts { display: flex; flex-direction: column; gap: 12px; }
+.about-contacts a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 15px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  transition: transform 0.3s, background 0.3s, color 0.3s, border-color 0.3s;
+  backdrop-filter: blur(4px);
+}
+.about-contacts a:hover { background: var(--bg-glass); color: var(--text-primary); transform: translateX(6px); border-color: var(--accent); }
+.about-contacts a .icon { font-size: 18px; width: 28px; text-align: center; }
+
+@media (max-width: 820px) {
+  .work-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; gap: 32px; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 480px) {
+  .work-card { padding: 18px 16px 16px; }
+  .work-card .card-name { font-size: 18px; }
+}
+/* ---- 正文两端对齐 ---- */
+.work-card .card-desc { text-align: justify; }
+.about-text p { text-align: justify; }
+/* ---- 作品卡片：技术栈 / 编程语言 图标标签 ---- */
+.card-tech { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 14px; min-height: 26px; }
+.tech-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px; font-weight: 500;
+  line-height: 1; white-space: nowrap;
+}
+.tech-chip img { width: 14px; height: 14px; object-fit: contain; display: block; }
+
+/* 技术栈标签：品牌蓝 */
+.tech-chip.stack {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+/* 语言标签：中性灰 */
+.tech-chip.lang {
+  background: var(--border-glass);
+  color: var(--text-secondary);
+}
+@supports not (color-mix: in srgb, red 50%, blue) {
+  .tech-chip.stack { background: rgba(0, 112, 243, 0.12); }
+}
+
+@media (max-width: 480px) {
+  .tech-chip { padding: 4px 10px; font-size: 11px; }
+  .tech-chip img { width: 12px; height: 12px; }
+}
+/* ---- 样机占位：替换为真实样机图时的外观 ---- */
+.card-mock.has-img {
+  padding: 0;            /* 覆盖占位文字版的装饰性内边距 */
+  border: none;
+  background: none;
+  height: auto;          /* 高度由图片自身决定 */
+  min-height: 0;
+}
+.card-mock.has-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}

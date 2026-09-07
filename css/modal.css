@@ -1,0 +1,159 @@
+/* ============================================================
+   modal.css —— 安卓应用详情弹窗（轮播 + 配置）
+   · z-index 5000：高于导航栏(1000)/移动菜单(999)/页脚
+   · 遮罩带高斯模糊，背景内容被虚化
+   · 轮播适配 1550×3302 竖版截图：图宽=视口宽，一次翻一整张
+   ============================================================ */
+#modal-overlay {
+  position: fixed; inset: 0;
+  z-index: 5000;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+#modal-overlay.open { display: flex; }
+
+.modal {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 20px;
+  padding: 20px 24px 24px;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(40px);
+  backdrop-filter: saturate(180%) blur(40px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  animation: m-pop 0.3s var(--ease-out-soft);
+}
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+  .modal { background: var(--bg-secondary); }
+}
+@keyframes m-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 关闭按钮（右上角，close.svg） */
+.m-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px;
+  border-radius: 50%; border: none; cursor: pointer;
+  background: var(--border-glass);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: color .25s, background .25s;
+}
+.m-close:hover { color: var(--text-primary); background: var(--bg-card); }
+.m-close .svg-ico { width: 16px; height: 16px; }
+
+/* 轮播区：竖版截图(1550×3302)适配 */
+.m-stage { position: relative; display: flex; align-items: center; justify-content: center; margin: 4px 0 10px; }
+/* 轮播区：视口尺寸由 JS 按截图比例设置；CSS 保证任何情况下完整显示并居中 */
+.m-stage { position: relative; display: flex; align-items: center; justify-content: center; margin: 4px 0 10px; }
+.m-viewport {
+  overflow: hidden;
+  border-radius: 14px;
+  width: 206px; height: 440px;        /* 默认竖版尺寸，JS 按截图比例覆盖 */
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  flex-shrink: 0;
+}
+.m-track {
+  display: flex;
+  height: 100%;                        /* ★ 解析自视口显式高度：下方全部拿到确定高度 */
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.m-shot { flex: 0 0 100%; height: 100%; }   /* 每张恰好占满一个视口宽 × 一个视口高 */
+.m-shot img {
+  width: 100%; height: 100%;
+  object-fit: contain;                 /* ★ 比例完全吻合时铺满；有偏差时完整显示并居中 */
+  display: block;
+}
+
+/* 左右翻页按钮（left.svg / right.svg，悬浮于轮播两侧） */
+.m-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px;
+  border-radius: 50%; border: none; cursor: pointer;
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  transition: color .25s, background .25s, transform .25s;
+  z-index: 2;
+}
+.m-prev { left: 0; }
+.m-next { right: 0; }
+.m-arrow:hover { color: var(--accent); transform: translateY(-50%) scale(1.06); }
+.m-arrow:active { transform: translateY(-50%) scale(0.94); }
+.m-arrow .svg-ico { width: 16px; height: 16px; }
+
+/* 指示器（当前第几张） */
+.m-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+.m-dots span {
+  width: 8px; height: 8px; border-radius: 4px;
+  background: var(--border-glass);
+  cursor: pointer;
+  transition: width .25s, background .25s;
+}
+.m-dots span.on { width: 22px; background: var(--accent); }
+
+/* 第一栏：应用图标（icons/app1~5.jpg）+ 应用名称 */
+.m-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.m-appicon {
+  width: 56px; height: 56px;
+  border-radius: 14px; overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 26px;                       /* 无 appicon 时的 emoji 兜底 */
+}
+.m-appicon img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+.m-appname { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+
+/* 第二栏：应用简介 —— 长文排版（JS 按换行自动分段为 <p>） */
+.m-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;               /* 长文阅读行高 */
+  text-align: justify;
+}
+.m-desc p {
+  margin: 0 0 10px;                /* 段间距 */
+  text-align: justify;
+  overflow-wrap: break-word;       /* 长英文串/URL 自动折行，不撑破弹窗 */
+}
+.m-desc p:last-child { margin-bottom: 0; }
+
+/* 第三栏：运行配置要求 */
+.m-req {
+  display: flex; gap: 10px; align-items: baseline;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  font-size: 13px;
+}
+.m-req-label { color: var(--text-muted); font-weight: 500; flex-shrink: 0; }
+.m-req-text  { color: var(--text-secondary); }
+
+/* 减动效降级 */
+@media (prefers-reduced-motion: reduce) {
+  .modal { animation: none; }
+  .m-track { transition: none; }
+}

@@ -1,0 +1,27 @@
+/* ============================================================
+   icons.css —— SVG 图标统一换色（mask + currentColor）
+   · SVG 作为蒙版，颜色跟随所在元素的 color 属性
+   · 日夜主题、悬停态自动适配，任何原色 SVG 都会被统一染色
+   · 路径相对于 css/ 目录 → ../icons/
+   ============================================================ */
+.svg-ico {
+  display: inline-block;
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  background-color: currentColor;      /* ★ 颜色来源：文字色 */
+  -webkit-mask-image: var(--ico);
+  mask-image: var(--ico);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.ico-menu     { --ico: url('../icons/menu.svg'); }
+.ico-close    { --ico: url('../icons/close.svg'); }
+.ico-up       { --ico: url('../icons/up.svg'); }
+.ico-down     { --ico: url('../icons/down.svg'); }
+.ico-left     { --ico: url('../icons/left.svg'); }
+.ico-right    { --ico: url('../icons/right.svg'); }
+.ico-download { --ico: url('../icons/download.svg'); }

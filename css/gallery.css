@@ -1,0 +1,165 @@
+/* ============================================================
+   gallery.css —— 作品墙：瀑布流 / 卡片 / Lightbox / 预览浮窗
+   · 瀑布流用 CSS 多列：桌面 4 列、平板 3 列、手机 2 列
+   · Lightbox：rgba(0,0,0,.7) 遮罩 + blur(20px) 高斯模糊
+   · 预览浮窗：毛玻璃（blur 10px），跟随鼠标/手指，pointer-events:none
+   ============================================================ */
+
+/* ---------------- 瀑布流容器 ---------------- */
+.gallery-grid {
+  column-count: 4;          /* 桌面 4 列 */
+  column-gap: 18px;
+}
+@media (max-width: 1024px) {
+  .gallery-grid { column-count: 3; column-gap: 16px; }   /* 平板 3 列 */
+}
+@media (max-width: 620px) {
+  .gallery-grid { column-count: 2; column-gap: 12px; }   /* 手机 2 列 */
+}
+
+.section-desc {
+  padding-bottom: 30px;
+}
+
+/* ---------------- 作品卡片 ---------------- */
+.gallery-card {
+  break-inside: avoid;               /* ★ 多列布局关键：卡片不被拦腰截断 */
+  margin: 0 0 18px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg-card);
+  transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s;
+}
+.gallery-card:hover,
+.gallery-card:focus-visible {
+  transform: translateY(-4px);       /* 悬停轻微上浮 */
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  outline: none;
+}
+[data-theme="dark"] .gallery-card:hover,
+[data-theme="dark"] .gallery-card:focus-visible { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5); }
+
+/* 图片：占满列宽、保持原始比例 */
+.gallery-card img {
+  width: 100%;
+  display: block;
+  -webkit-touch-callout: none;       /* 长按不弹 iOS 图片菜单 */
+  user-select: none;
+}
+
+/* 标题+日期：叠在图片底部，半透明渐变底 */
+.g-cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 26px 12px 10px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent);
+  color: #fff;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  opacity: 0; transition: opacity .3s;
+}
+.gallery-card:hover .g-cap,
+.gallery-card:focus-visible .g-cap { opacity: 1; }
+@media (hover: none) { .g-cap { opacity: 1; } }   /* 触屏无悬停：常显 */
+.g-title {
+  font-size: 13px; font-weight: 500;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.g-date {
+  font-size: 11px; color: rgba(255, 255, 255, 0.75);
+  font-variant: tabular-nums; flex-shrink: 0;
+}
+
+/* ---------------- Lightbox（全屏放大） ---------------- */
+#lightbox-overlay {
+  position: fixed; inset: 0;
+  z-index: 5000;                     /* 与 modal 同级：高于导航栏/页脚/噪点 */
+  display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.7);    /* 半透明黑遮罩 */
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);       /* 底层内容高斯模糊 */
+}
+#lightbox-overlay.open { display: flex; }
+
+.lb-figure {
+  max-width: min(920px, 100%);
+  text-align: center;
+  animation: lb-in 0.3s ease;
+}
+@keyframes lb-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+#lb-img {
+  max-width: 100%;
+  max-height: 70vh;
+  display: block; margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.lb-figure figcaption { margin-top: 16px; color: rgba(255, 255, 255, 0.92); }
+#lb-title { font-size: 16px; font-weight: 600; }
+#lb-date {
+  font-size: 12px; color: rgba(255, 255, 255, 0.6);
+  font-variant: tabular-nums; margin: 4px 0 8px;
+}
+#lb-desc {
+  font-size: 13px; line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 640px; margin: 0 auto;
+  text-align: justify;
+}
+
+/* 关闭按钮（毛玻璃圆钮，close.svg） */
+#lb-close {
+  position: absolute; top: 18px; right: 18px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: background .25s, transform .25s;
+}
+#lb-close:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.06); }
+#lb-close .svg-ico { width: 16px; height: 16px; }
+
+/* ---------------- 预览浮窗（悬停 / 长按） ---------------- */
+#gallery-preview {
+  position: fixed; left: 0; top: 0;
+  z-index: 1500;                     /* 高于内容与导航栏，低于 Lightbox */
+  max-width: 340px;
+  padding: 8px;
+  border-radius: 14px;
+  background: var(--nav-bg);         /* 主题自适应毛玻璃 */
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow);
+  pointer-events: none;              /* ★ 不挡鼠标，绝不干扰点击 */
+  opacity: 0; visibility: hidden;
+  transition: opacity .2s ease;
+  will-change: transform;
+}
+#gallery-preview.show { opacity: 1; visibility: visible; }
+#gallery-preview img {
+  width: 100%; height: auto;
+  max-height: 38vh; object-fit: contain;
+  display: block; border-radius: 9px;
+  background: var(--bg-card);
+}
+#gallery-preview .gp-title {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-primary);
+  padding: 7px 4px 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* 减动效降级 */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-card, .g-cap, #gallery-preview { transition: none; }
+  .lb-figure { animation: none; }
+}
