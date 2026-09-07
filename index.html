@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCS · 东仓刀</title>
+<link rel="icon" href="icons/websiteheader_logo.png">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/aurora.css"> 
+<link rel="stylesheet" href="css/icons.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/gallery.css">
+
+</head>
+<body>
+
+<!-- 主题刷屏过渡层 -->
+<div id="theme-transition"></div>
+
+<!-- ============ 导航栏 ============ -->
+<nav id="navbar">
+  <ul id="nav-links">
+    <li><a href="#index"  data-nav><span class="num">01</span><span data-i18n="nav_home">首页</span></a></li>
+    <li><a href="#works"  data-nav><span class="num">02</span><span data-i18n="nav_work">作品集</span></a></li>
+    <li><a href="#skills" data-nav><span class="num">03</span><span data-i18n="nav_tech">技术栈</span></a></li>
+    <li><a href="#about"  data-nav><span class="num">04</span><span data-i18n="nav_about">关于我</span></a></li>
+  </ul>
+  <!-- 修复：指示条移出 #nav-links，作为 #navbar 直接子级，
+       与 JS 计算基准（navbar 矩形）保持一致，彻底解决错位 -->
+  <div id="nav-indicator"></div>
+  <div id="nav-tools">
+    <button id="lang-toggle" aria-label="切换语言"><span id="lang-label">简</span></button>
+      <button id="hamburger" aria-label="菜单" aria-expanded="false">
+      <span class="svg-ico ico-menu"></span>
+      <span class="svg-ico ico-close"></span>
+    </button>
+    <button id="theme-toggle" aria-label="切换主题"><span class="icon">☀️</span></button>
+  </div>
+</nav>
+
+<!-- 移动端全屏菜单 -->
+<div id="mobile-menu">
+  <a href="#index"  data-nav><span class="num">01</span><span data-i18n="nav_home">首&nbsp;页</span></a>
+  <a href="#works"  data-nav><span class="num">02</span><span data-i18n="nav_work">作品集</span></a>
+  <a href="#skills" data-nav><span class="num">03</span><span data-i18n="nav_tech">技术栈</span></a>
+  <a href="#about"  data-nav><span class="num">04</span><span data-i18n="nav_about">关于我</span></a>
+</div>
+
+<!-- ============ 主体：四个页面容器（Hash 路由） ============ -->
+<main id="app">
+
+  <div id="page-index" class="page-container" data-page="index">
+    <canvas id="bg-canvas"></canvas>
+    <div class="page-content">
+      <p class="section-label" id="home-label">DONGCANGSWORD // 东仓刀</p>
+      <h1 class="home-title" id="home-title" data-i18n="home_title">东仓刀</h1>
+      <p class="home-sub"><span class="rotating" id="rotating-text">移动端开发</span></p>
+      <div class="home-meta">
+        <span>🕒 <span class="value" id="clock">--:--:--</span></span>
+        <span>BUILD <span class="value" id="build-version">DCS_4.0.0</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-works" class="page-container" data-page="works">
+    <p class="section-label">02</p>
+    <h2 class="section-title" data-i18n="work_title">精选项目</h2>
+    <p class="section-desc" data-i18n="work_desc">移动端与网页领域的实践探索</p>
+    <h3 class="work-section-title"><span data-i18n="work_android">ANDROID / 安卓应用</span><span class="tag">5</span></h3>
+    <div class="work-grid" id="android-grid"></div>
+    <h3 class="work-section-title"><span data-i18n="work_web">WEB / 网页作品</span><span class="tag">2</span></h3>
+    <div class="work-grid" id="web-grid"></div>
+  </div>
+
+  <section id="page-skills" class="page-container">
+    <div class="section-label" data-i18n="gallery_label">03 · 照片墙</div>
+    <h1 class="section-title" data-i18n="gallery_title">视觉作品集</h1>
+    <p class="section-desc" data-i18n="gallery_desc">快门与像素收集的片段。</p>
+    <div id="gallery-grid" class="gallery-grid"></div>
+  </section>
+
+  <div id="page-about" class="page-container" data-page="about">
+    <p class="section-label">04</p>
+    <h2 class="section-title" data-i18n="about_title">关于东仓刀</h2>
+    <div class="about-grid">
+      <div class="about-text" id="about-text"></div>
+      <div class="about-contacts" id="about-contacts"></div>
+    </div>
+  </div>
+
+</main>
+
+<div id="scroll-progress"></div>
+
+<!-- 页尾：fixed 常驻视口底部，四页共用，与导航栏对称 -->
+<footer id="site-footer">
+  <div class="footer-inner">
+
+    <!-- 第一层：左（声明 + GitHub）｜右（作者 + logo） -->
+    <div class="footer-row footer-main">
+      <div class="fm-left">
+        <div class="footer-decl">
+          <span class="decl-ico">📷</span>
+          <p data-i18n="footer_photo_decl">作品墙照片均由本人拍摄，仅用于本站展示，不涉及第三方版权。</p>
+        </div>
+        <a class="footer-gh" href="https://github.com/dongcangsword" target="_blank" rel="noopener noreferrer">
+          <svg class="gh-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+      <div class="fm-right">
+        <span class="footer-author" data-i18n="footer_author">东仓刀</span>
+        <span id="footer-logo" class="footer-logo" role="img" aria-label="logo"></span>
+      </div>
+    </div>
+
+    <!-- 第二层：左（版权年份）｜右（上一页 / 下一页） -->
+    <div class="footer-row footer-sub">
+      <div class="fs-copy">© <span id="footer-year">2026</span> <span data-i18n="footer_rights">保留所有权利</span></div>
+      <div class="fs-nav">
+        <button id="footer-prev" class="page-nav-btn" type="button">
+          <span class="ico ico-left" aria-hidden="true"></span>
+          <span class="pn-label" data-i18n="footer_prev">上一页</span>
+        </button>
+        <button id="footer-next" class="page-nav-btn" type="button">
+          <span class="pn-label" data-i18n="footer_next">下一页</span>
+          <span class="ico ico-right" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- 脚本按依赖顺序加载（普通 script，file:// 双击可运行） -->
+<script src="js/data.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/render.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/router.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
